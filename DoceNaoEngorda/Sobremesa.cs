@@ -8,7 +8,5 @@
         public double Peso { get; set; }
         public decimal Preco { get; set; }
         public int QuantidadeEmEstoque { get; set; } = 0;
-
-
     }
 }

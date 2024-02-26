@@ -43,8 +43,6 @@ internal class Program
             }
 
         } while (escolhaMenu != 0);
-
-
     }
 
     private static int ValidaEscolhaDoUsuario()
@@ -89,6 +87,7 @@ internal class Program
             {
                 listaTemporariaDeDoces[i] = listaDeDoces[i];
             }
+
             listaTemporariaDeDoces[listaDeDoces.Length] = doce;
             listaDeDoces = listaTemporariaDeDoces;
         }
