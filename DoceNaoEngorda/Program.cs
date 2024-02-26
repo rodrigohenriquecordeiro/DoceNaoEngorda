@@ -29,13 +29,13 @@ internal class Program
                     ListarProdutos(ref listaDeDoces);
                     break;
                 case 3:
-                    RemoverProdutos();
+                    RemoverProdutos(ref listaDeDoces);
                     break;
                 case 4:
-                    EntradaEstoque();
+                    EntradaEstoque(ref listaDeDoces);
                     break;
                 case 5:
-                    SaidaEstoque();
+                    SaidaEstoque(ref listaDeDoces);
                     break;
                 case 0:
                     Sair();
@@ -98,34 +98,89 @@ internal class Program
 
     private static void ListarProdutos(ref Sobremesa[] listaDeDoces)
     {
+        string resultadoLinha1 = string.Empty;
+
         for (int i = 0; i < listaDeDoces.Length; i++)
         {
-            Console.WriteLine($"\n  Cod: {listaDeDoces[i].Codigo}.\n" +
-                $"  Sobremesa: {listaDeDoces[i].Nome}.\n" +
-                $"  Data de Fabricação: {listaDeDoces[i].DataDaFabricao.ToShortDateString()}.\n" +
-                $"  Preço: {listaDeDoces[i].Preco}.\n" +
-                $"  Peso: {listaDeDoces[i].Peso}.\n" +
-                $"  Estoque: {listaDeDoces[i].QuantidadeEmEstoque}.");
+            resultadoLinha1 = $"  Código: {listaDeDoces[i].Codigo}. Sobremesa: {listaDeDoces[i].Nome.Trim().ToUpper()}. Preço: {listaDeDoces[i].Preco.ToString("C2")}. Peso: {listaDeDoces[i].Peso.ToString("F2")} gramas.";
+            string resultadoLinha2 = $"  Data de Fabricação: {listaDeDoces[i].DataDaFabricao.ToShortDateString()}. Estoque: {listaDeDoces[i].QuantidadeEmEstoque} unidades.";
+
+            Console.WriteLine();
+            Console.WriteLine(new string('*', resultadoLinha1.Length));
+            Console.WriteLine(resultadoLinha1);
+            Console.WriteLine(resultadoLinha2);
+
         }
+        Console.WriteLine();
+        Console.WriteLine(new string('*', resultadoLinha1.Length));
     }
 
-    private static void RemoverProdutos()
+    private static Sobremesa[] RemoverProdutos(ref Sobremesa[] listaDeDoces)
     {
-        Console.WriteLine("RemoverProdutos");
+        Console.Write("\n  Qual o código da sobremesa que você quer remover? ");
+        int codigoParaRemover = int.Parse(Console.ReadLine());
+
+        Sobremesa[] novaListaDeDoces = new Sobremesa[listaDeDoces.Length - 1];
+        int indiceNovoArray = 0;
+
+        for (int i = 0; i < listaDeDoces.Length; i++)
+        {
+            if (listaDeDoces[i].Codigo != codigoParaRemover)
+            {
+                novaListaDeDoces[indiceNovoArray] = listaDeDoces[i];
+                indiceNovoArray++;
+            }
+        }
+
+        Console.WriteLine($"\n  Removemos com sucesso a sobremesa {listaDeDoces[codigoParaRemover - 1].Nome.ToUpper()}");
+        listaDeDoces = novaListaDeDoces;
+
+        return listaDeDoces;
     }
 
-    private static void EntradaEstoque()
+    private static Sobremesa[] EntradaEstoque(ref Sobremesa[] listaDeDoces)
     {
-        Console.WriteLine("EntradaEstoque");
+        Console.Write("\n  Digite o Código da sobremesa que você quer alterar: ");
+        int sobremesaQueSeraAlterada = int.Parse(Console.ReadLine());
+        string nomeSobremesaAlterada = listaDeDoces[sobremesaQueSeraAlterada - 1].Nome.ToUpper();
+
+        Console.Write($"  Digite a quantidade a ser adicionada a sobremesa {nomeSobremesaAlterada}: ");
+        int quantidadeAdicionada = int.Parse(Console.ReadLine());
+
+        for (int i = 0; i < listaDeDoces.Length; i++)
+        {
+            if (listaDeDoces[i].Codigo == sobremesaQueSeraAlterada)
+                listaDeDoces[i].QuantidadeEmEstoque += quantidadeAdicionada;
+        }
+
+        Console.WriteLine($"  Foi adicionado {quantidadeAdicionada} unidades no estoque da sobremesa {nomeSobremesaAlterada}!");
+
+        return listaDeDoces;
     }
 
-    private static void SaidaEstoque()
+    private static Sobremesa[] SaidaEstoque(ref Sobremesa[] listaDeDoces)
     {
-        Console.WriteLine("SaidaEstoque");
+        Console.Write("\n  Digite o Código da sobremesa que você quer alterar: ");
+        int sobremesaQueSeraAlterada = int.Parse(Console.ReadLine());
+        string nomeSobremesaAlterada = listaDeDoces[sobremesaQueSeraAlterada - 1].Nome.ToUpper();
+
+        Console.Write($"  Digite a quantidade a ser removida a sobremesa {nomeSobremesaAlterada}: ");
+        int quantidadeRemovida = int.Parse(Console.ReadLine());
+
+        for (int i = 0; i < listaDeDoces.Length; i++)
+        {
+            if (listaDeDoces[i].Codigo == sobremesaQueSeraAlterada)
+                listaDeDoces[i].QuantidadeEmEstoque -= quantidadeRemovida;
+        }
+
+        Console.WriteLine($"  Foi removido {quantidadeRemovida} unidades no estoque da sobremesa {nomeSobremesaAlterada}!");
+
+        return listaDeDoces;
     }
 
     private static void Sair()
     {
         Console.WriteLine("Sair");
+        Console.WriteLine("\nCopyright©️ Rodrigo Henrique Cordeiro");
     }
 }
