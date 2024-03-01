@@ -9,40 +9,48 @@ internal class Program
 
         do
         {
-            Console.WriteLine("\n>>---> Doce Não Engorda! <---<<\n\n" +
-            "  [1] Novo\n" +
-            "  [2] Listar Produtos\n" +
-            "  [3] Remover Produtos\n" +
-            "  [4] Entrada Estoque\n" +
-            "  [5] Saída Estoque\n" +
-            "  [0] Sair\n");
-
-            Console.Write("\nDigite sua escolha: ");
-            escolhaMenu = ValidaEscolhaDoUsuario();
-
-            switch (escolhaMenu)
-            {
-                case 1:
-                    Novo(ref listaDeDoces);
-                    break;
-                case 2:
-                    ListarProdutos(ref listaDeDoces);
-                    break;
-                case 3:
-                    RemoverProdutos(ref listaDeDoces);
-                    break;
-                case 4:
-                    EntradaEstoque(ref listaDeDoces);
-                    break;
-                case 5:
-                    SaidaEstoque(ref listaDeDoces);
-                    break;
-                case 0:
-                    Sair();
-                    break;
-            }
+            escolhaMenu = Menu(ref listaDeDoces);
 
         } while (escolhaMenu != 0);
+    }
+
+    private static int Menu(ref Sobremesa[] listaDeDoces)
+    {
+        int escolhaMenu;
+        Console.WriteLine("\n>>---> Doce Não Engorda! <---<<\n\n" +
+                    "  [1] Novo\n" +
+                    "  [2] Listar Produtos\n" +
+                    "  [3] Remover Produtos\n" +
+                    "  [4] Entrada Estoque\n" +
+                    "  [5] Saída Estoque\n" +
+                    "  [0] Sair\n");
+
+        Console.Write("\nDigite sua escolha: ");
+        escolhaMenu = ValidaEscolhaDoUsuario();
+
+        switch (escolhaMenu)
+        {
+            case 1:
+                Novo(ref listaDeDoces);
+                break;
+            case 2:
+                ListarProdutos(ref listaDeDoces);
+                break;
+            case 3:
+                RemoverProdutos(ref listaDeDoces);
+                break;
+            case 4:
+                EntradaEstoque(ref listaDeDoces);
+                break;
+            case 5:
+                SaidaEstoque(ref listaDeDoces);
+                break;
+            case 0:
+                Sair();
+                break;
+        }
+
+        return escolhaMenu;
     }
 
     private static int ValidaEscolhaDoUsuario()
@@ -61,21 +69,87 @@ internal class Program
         Sobremesa doce = new();
 
         Console.Write("  Código: ");
-        doce.Codigo = int.Parse(Console.ReadLine());
+        ValidaNovoCodigo(doce);
 
         Console.Write("  Nome da Sobremesa: ");
-        doce.Nome = Console.ReadLine();
+        ValidaNovoNome(doce);
 
         Console.Write("  Data da Fabricação: ");
-        doce.DataDaFabricao = DateTime.Parse(Console.ReadLine());
+        ValidaNovaDataFabricacao(doce);
 
         Console.Write($"  Qual o peso? ");
-        doce.Peso = double.Parse(Console.ReadLine());
+        ValidaNovoPeso(doce);
 
         Console.Write("  Quanto custa: ");
-        doce.Preco = decimal.Parse(Console.ReadLine());
+        ValidaNovoPreco(doce);
 
         listaDeDoces = AdicionaNovoDoceNaLista(listaDeDoces, doce);
+    }
+
+    private static void ValidaNovoCodigo(Sobremesa doce)
+    {
+        int codigo;
+
+        while (!int.TryParse(Console.ReadLine(), out codigo))
+        {
+            Console.WriteLine("  Digite um Código válido para a sobremesa");
+            Console.Write("  NOVA TENTATIVA: ");
+        }
+
+        doce.Codigo = codigo;
+    }
+
+    private static void ValidaNovoNome(Sobremesa doce)
+    {
+        string? nome = Console.ReadLine();
+
+        while (nome is null || nome == "")
+        {
+            Console.WriteLine("  Digite um nome válido para a sobremesa");
+            Console.Write("  NOVA TENTATIVA: ");
+            nome = Console.ReadLine();
+        }
+
+        doce.Nome = nome;
+    }
+
+    private static void ValidaNovaDataFabricacao(Sobremesa doce)
+    {
+        DateTime data;
+
+        while (!DateTime.TryParse(Console.ReadLine(), out data))
+        {
+            Console.WriteLine("  Digite uma data valida para a sobremesa");
+            Console.Write("  NOVA TENTATIVA: ");
+        }
+
+        doce.DataDaFabricao = data;
+    }
+
+    private static void ValidaNovoPeso(Sobremesa doce)
+    {
+        double peso;
+
+        while (!double.TryParse(Console.ReadLine(), out peso))
+        {
+            Console.WriteLine("  Digite um peso valido para a sobremesa");
+            Console.Write("  NOVA TENTATIVA: ");
+        }
+
+        doce.Peso = peso;
+    }
+
+    private static void ValidaNovoPreco(Sobremesa doce)
+    {
+        decimal preco;
+
+        while (!decimal.TryParse(Console.ReadLine(), out preco))
+        {
+            Console.WriteLine("  Digite um preço valido para a sobremesa");
+            Console.Write("  NOVA TENTATIVA: ");
+        }
+
+        doce.Preco = preco;
     }
 
     private static Sobremesa[] AdicionaNovoDoceNaLista(Sobremesa[] listaDeDoces, Sobremesa doce)
@@ -101,7 +175,7 @@ internal class Program
 
         for (int i = 0; i < listaDeDoces.Length; i++)
         {
-            resultadoLinha1 = $"  Código: {listaDeDoces[i].Codigo}. Sobremesa: {listaDeDoces[i].Nome.Trim().ToUpper()}. Preço: {listaDeDoces[i].Preco.ToString("C2")}. Peso: {listaDeDoces[i].Peso.ToString("F2")} gramas.";
+            resultadoLinha1 = $"  Código: {listaDeDoces[i].Codigo}. Sobremesa: {listaDeDoces[i].Nome.Trim().ToUpper()}. Preço: {listaDeDoces[i].Preco:C2}. Peso: {listaDeDoces[i].Peso:F2} gramas.";
             string resultadoLinha2 = $"  Data de Fabricação: {listaDeDoces[i].DataDaFabricao.ToShortDateString()}. Estoque: {listaDeDoces[i].QuantidadeEmEstoque} unidades.";
 
             Console.WriteLine();
@@ -152,7 +226,10 @@ internal class Program
                 listaDeDoces[i].QuantidadeEmEstoque += quantidadeAdicionada;
         }
 
-        Console.WriteLine($"  Foi adicionado {quantidadeAdicionada} unidades no estoque da sobremesa {nomeSobremesaAlterada}!");
+        if (quantidadeAdicionada == 0)
+            Console.WriteLine($"  Foi adicionado {quantidadeAdicionada} unidade no estoque da sobremesa {nomeSobremesaAlterada}!");
+        else
+            Console.WriteLine($"  Foram adicionadas {quantidadeAdicionada} unidades no estoque da sobremesa {nomeSobremesaAlterada}!");
 
         return listaDeDoces;
     }
@@ -172,7 +249,10 @@ internal class Program
                 listaDeDoces[i].QuantidadeEmEstoque -= quantidadeRemovida;
         }
 
-        Console.WriteLine($"  Foi removido {quantidadeRemovida} unidades no estoque da sobremesa {nomeSobremesaAlterada}!");
+        if (quantidadeRemovida == 0)
+            Console.WriteLine($"  Foi removido {quantidadeRemovida} unidade no estoque da sobremesa {nomeSobremesaAlterada}!");
+        else
+            Console.WriteLine($"  Foram removidos {quantidadeRemovida} unidades no estoque da sobremesa {nomeSobremesaAlterada}!");
 
         return listaDeDoces;
     }
